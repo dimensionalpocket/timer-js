@@ -4,16 +4,11 @@
 
 import { expect } from '@dimensionalpocket/development'
 
-import { Timeout, Interval } from '../index.js'
-import { Timeout as TimeoutFromSrc } from '../src/Timeout.js'
-import { Interval as IntervalFromSrc } from '../src/Interval.js'
+import Timer from '../index.js'
+import { Timer as TimerFromSrc } from '../src/Timer.js'
 
 describe('main require', function () {
-  it('exports Timeout from src', function () {
-    expect(Timeout).to.equal(TimeoutFromSrc)
-  })
-
-  it('exports Interval from src', function () {
-    expect(Interval).to.equal(IntervalFromSrc)
+  it('exports Timer from src', function () {
+    expect(Timer).to.equal(TimerFromSrc)
   })
 })

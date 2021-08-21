@@ -1,4 +1,3 @@
-import { Timeout } from './src/Timeout.js'
-import { Interval } from './src/Interval.js'
+import { Timer } from './src/Timer.js'
 
-export { Timeout, Interval }
+export default Timer
