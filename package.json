@@ -1,0 +1,49 @@
+{
+  "name": "@dimensionalpocket/timer",
+  "version": "0.0.0",
+  "description": "A timeout/interval Javascript wrapper.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "npm run lint && NODE_ENV=test c8 mocha",
+    "test:ci": "NODE_ENV=test mocha",
+    "lint": "standardx --fix --verbose",
+    "release": "release-it --config ./node_modules/@dimensionalpocket/development/release-it/config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dimensionalpocket/timer-js.git"
+  },
+  "author": "dimensionalpocket.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dimensionalpocket/timer-js/issues"
+  },
+  "homepage": "https://github.com/dimensionalpocket/timer-js#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@dimensionalpocket/development": "github:dimensionalpocket/development-js#0.3.0",
+    "release-it": "14.11.5"
+  },
+  "babel": {
+    "extends": "./node_modules/@dimensionalpocket/development/babel"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/@dimensionalpocket/development/eslint"
+  },
+  "mocha": {
+    "recursive": true,
+    "reporter": "dot",
+    "colors": true
+  },
+  "c8": {
+    "all": true,
+    "include": [
+      "index.js",
+      "src"
+    ]
+  },
+  "engines": {
+    "node": ">= 14.17.1"
+  }
+}
