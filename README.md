@@ -12,7 +12,7 @@ import Timer from '@dimensionalpocket/timer'
 var myFunc = () => console.log('Hello world!')
 
 // Initialize a timer but don't start it yet.
-// Available events: `tick`, `start`, `stop`
+// Available events: tick, start, stop
 var timer = new Timer({duration: 1000})
 timer.on('tick', myFunc)
 
