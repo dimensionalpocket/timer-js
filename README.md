@@ -11,13 +11,9 @@ import Timer from '@dimensionalpocket/timer'
 
 var myFunc = () => console.log('Hello world!')
 
-// Initialize a timer using the callback option,
-// but don't start it yet.
-var timer = new Timer({callback: myFunc, duration: 1000})
-
-// You can also use emitters instead of callbacks.
+// Initialize a timer but don't start it yet.
 // Available events: `tick`, `start`, `stop`
-var timer = new Timer({emit: true, duration: 1000})
+var timer = new Timer({duration: 1000})
 timer.on('tick', myFunc)
 
 // Will fire callback once after 1s.
