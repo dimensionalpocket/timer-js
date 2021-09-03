@@ -6,6 +6,15 @@ import EventEmitter from 'eventemitter3'
 
 export class Timer extends EventEmitter {
   /**
+   * @typedef {Object} TimerOptions - Options for constructor and `start()` methods.
+   * @property {number} [duration] - Duration of each tick in ms. Defaults to 1000.
+   * @property {number} [delay] - Delay in ms before starting the timer. Defaults to zero.
+   * @property {number} [repeat] - How many times to emit the `tick` event. Defaults to 1. Will be set to -1 (infinite) if `loop` is `true`.
+   * @property {boolean} [loop] - If `true`, will loop infinitely. Defaults to `false`.
+   * @property {boolean} [interval] - If `true`, will use `setInterval` internally when `repeat` is `> 1`. Defaults to `false`.
+   */
+
+  /**
    * @param {TimerOptions} [options]
    */
   constructor (options = null) {
@@ -74,6 +83,13 @@ export class Timer extends EventEmitter {
      */
     this._intervalRef = null
 
+    /**
+     * `true` if timer is running.
+     * @type {boolean}
+     * @private
+     */
+    this._started = false
+
     this.configure(options)
   }
 
@@ -87,7 +103,7 @@ export class Timer extends EventEmitter {
     if (options.delay !== undefined) this._delay = options.delay
     if (options.repeat !== undefined) this._repeat = Math.max(options.repeat || 1, 1)
     if (options.loop === true) this._repeat = -1
-    if (options.interval === true) this._interval = true
+    if (options.interval !== undefined) this._interval = options.interval
   }
 
   /**
@@ -95,6 +111,8 @@ export class Timer extends EventEmitter {
    * @param {TimerOptions} [options]
    */
   start (options = null) {
+    if (this._started) this.stop()
+
     this.configure(options)
 
     this._delayed = false
@@ -110,6 +128,8 @@ export class Timer extends EventEmitter {
     } else {
       this.schedule()
     }
+
+    this._started = true
   }
 
   /**
@@ -133,7 +153,7 @@ export class Timer extends EventEmitter {
   }
 
   /**
-   * Schedules next tick in non-interval mode.
+   * Schedules the next tick in non-interval mode.
    * @private
    */
   schedule () {
@@ -141,6 +161,8 @@ export class Timer extends EventEmitter {
   }
 
   tick () {
+    if (!this._started) return // Guard against race conditions
+
     this._count++
     this.emit('tick', this)
 
@@ -155,11 +177,13 @@ export class Timer extends EventEmitter {
    * Clears all active timeouts and intervals.
    */
   stop () {
+    this._started = false
+    this._count = 0
+
     this._stopDelay()
     this._stopInterval()
     this._stopTimeout()
 
-    this._count = 0
     this.emit('stop', this)
   }
 
@@ -193,15 +217,6 @@ export class Timer extends EventEmitter {
     }
   }
 }
-
-/**
- * @typedef {Object} TimerOptions - Options for constructor and `start()` methods.
- * @property {number} [duration] - Duration of each tick in ms. Defaults to 1000.
- * @property {number} [delay] - Delay in ms before starting the timer. Defaults to zero.
- * @property {number} [repeat] - How many times to emit the `tick` event. Defaults to 1. Will be set to -1 (infinite) if `loop` is `true`.
- * @property {boolean} [loop] - If `true`, will loop infinitely. Defaults to `false`.
- * @property {boolean} [interval] - If `true`, will use `setInterval` internally when `repeat` is `> 1`. Defaults to `false`.
- */
 
 /**
  * Starts a timer. Used as arguments to `setTimeout` and `setInterval` to avoid function binding.
