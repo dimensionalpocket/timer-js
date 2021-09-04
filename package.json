@@ -24,8 +24,8 @@
     "eventemitter3": "^4.0.7"
   },
   "devDependencies": {
-    "@dimensionalpocket/development": "github:dimensionalpocket/development-js#0.3.0",
-    "release-it": "14.11.5"
+    "@dimensionalpocket/development": "github:dimensionalpocket/development-js#0.4.0",
+    "@dimensionalpocket/release": "github:dimensionalpocket/release-js#0.2.0"
   },
   "babel": {
     "extends": "./node_modules/@dimensionalpocket/development/babel"
