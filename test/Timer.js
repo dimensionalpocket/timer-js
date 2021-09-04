@@ -91,6 +91,9 @@ describe('Timer', function () {
       this.timer.on('tick', (timer) => {
         this.ticks.unshift(['tick', timer, Date.now()])
       })
+      this.timer.on('delay', (timer) => {
+        this.ticks.unshift(['delay', timer, Date.now()])
+      })
       this.timer.on('stop', (timer) => {
         this.ticks.unshift(['stop', timer, Date.now()])
       })
@@ -150,6 +153,21 @@ describe('Timer', function () {
         this.timer.configure({ duration: 1000 })
         this.ticks.length = 0
       })
+
+      it('starts with a given delay', function () {
+        this.ticks.length = 0
+        this.timer.start({ delay: 5000 })
+        expect(this.ticks[0][0]).to.eq('delay')
+        this.clock.tick(5500) // Past delay, timer has started
+        expect(this.ticks[0][0]).to.eq('start')
+        this.clock.tick(500) // First tick
+        expect(this.ticks[0][0]).to.eq('tick')
+
+        // Reset
+        this.timer.stop()
+        this.timer.configure({ delay: 0 })
+        this.ticks.length = 0
+      })
     }
 
     context('when not using interval', function () {
@@ -170,6 +188,50 @@ describe('Timer', function () {
       })
 
       itBehavesLikeItRunsTheTimer()
+    })
+  })
+
+  describe('#stop', function () {
+    // TODO change these specs to test behavior instead of checking private variables
+    it('stops non-interval timers', function () {
+      var timer = new Timer()
+      timer.start()
+      // @ts-ignore private property
+      expect(timer._timeoutRef).to.exist
+      timer.stop()
+      // @ts-ignore private property
+      expect(timer._timeoutRef).to.eq(null)
+    })
+
+    it('stops interval timers', function () {
+      var timer = new Timer({ interval: true })
+      timer.start()
+      // @ts-ignore private property
+      expect(timer._intervalRef).to.exist
+      timer.stop()
+      // @ts-ignore private property
+      expect(timer._intervalRef).to.eq(null)
+    })
+
+    it('stops delays', function () {
+      var timer = new Timer({ delay: 5000 })
+      timer.start()
+      this.clock.tick(2500)
+      // @ts-ignore private property
+      expect(timer._delayRef).to.exist
+      timer.stop()
+      // @ts-ignore private property
+      expect(timer._delayRef).to.eq(null)
+    })
+  })
+
+  describe('#tick', function () {
+    // TODO test behavior
+    it('does not execute on a stopped timer', function () {
+      var timer = new Timer()
+      timer.tick()
+      // @ts-ignore private property
+      expect(timer._count).to.eq(0)
     })
   })
 })

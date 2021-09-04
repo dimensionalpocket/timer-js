@@ -115,7 +115,6 @@ export class Timer extends EventEmitter {
 
     this.configure(options)
 
-    this._delayed = false
     var delayed = this._startDelay()
     if (delayed) return
 
@@ -141,6 +140,7 @@ export class Timer extends EventEmitter {
     if (this._delay > 0 && this._delayed === false) {
       this._delayed = true
       this._delayRef = setTimeout(startTimerHelper, this._delay, this)
+      this.emit('delay', this, this._delay)
       return true
     }
 
@@ -148,6 +148,8 @@ export class Timer extends EventEmitter {
       clearTimeout(this._delayRef)
       this._delayRef = null
     }
+
+    this._delayed = false
 
     return false
   }
@@ -178,6 +180,7 @@ export class Timer extends EventEmitter {
    */
   stop () {
     this._started = false
+    this._delayed = false
     this._count = 0
 
     this._stopDelay()

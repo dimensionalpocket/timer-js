@@ -45,7 +45,4 @@ timer.start({delay: 5000, loop: true})
 // If you prefer to use `setInterval` internally for looping:
 timer.start({loop: true, interval: true})
 timer.start({repeat: 5, interval: true})
-
-// Adds a delay to an ongoing timer.
-timer.delay(1000)
 ```
