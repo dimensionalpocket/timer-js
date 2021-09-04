@@ -168,6 +168,18 @@ describe('Timer', function () {
         this.timer.configure({ delay: 0 })
         this.ticks.length = 0
       })
+
+      it('loops infinitely with loop = true', function () {
+        this.ticks.length = 0
+        this.timer.start({ loop: true })
+        this.clock.tick(1000 * 10000)
+        expect(this.ticks.length).to.eq(10001) // 1 start + 10000 ticks
+
+        // Reset
+        this.timer.stop()
+        this.timer.configure({ loop: false })
+        this.ticks.length = 0
+      })
     }
 
     context('when not using interval', function () {
