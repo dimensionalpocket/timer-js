@@ -6,7 +6,7 @@ import EventEmitter from 'eventemitter3'
 
 export class Timer extends EventEmitter {
   /**
-   * @typedef {Object} TimerOptions - Options for constructor and `start()` methods.
+   * @typedef {Object} TimerOptions - Options for constructor, `start()` and `configure()` methods.
    * @property {number} [duration] - Duration of each tick in ms. Defaults to 1000.
    * @property {number} [delay] - Delay in ms before starting the timer. Defaults to zero.
    * @property {number} [repeat] - How many times to emit the `tick` event. Defaults to 1. Will be set to -1 (infinite) if `loop` is `true`.
