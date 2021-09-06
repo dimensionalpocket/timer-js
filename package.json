@@ -8,7 +8,7 @@
     "test": "npm run lint && NODE_ENV=test c8 mocha",
     "test:ci": "NODE_ENV=test mocha",
     "lint": "standardx --fix --verbose",
-    "release": "release-it --config ./node_modules/@dimensionalpocket/development/release-it/config.js"
+    "release": "release-it --config ./node_modules/@dimensionalpocket/release/config/default.js"
   },
   "repository": {
     "type": "git",
