@@ -51,9 +51,8 @@ export class Timer extends EventEmitter {
     /**
      * The number of times a tick has happened after the timer started.
      * @type {number}
-     * @private
      */
-    this._count = 0
+    this.count = 0
 
     /**
      * If `true`, will use `setInterval` internally.
@@ -118,7 +117,7 @@ export class Timer extends EventEmitter {
     var delayed = this._startDelay()
     if (delayed) return
 
-    this._count = 0
+    this.count = 0
 
     this.emit('start', this)
 
@@ -165,10 +164,10 @@ export class Timer extends EventEmitter {
   tick () {
     if (!this._started) return // Guard against race conditions
 
-    this._count++
+    this.count++
     this.emit('tick', this)
 
-    if (this._repeat > 0 && this._count >= this._repeat) {
+    if (this._repeat > 0 && this.count >= this._repeat) {
       this.stop()
     } else if (this._interval !== true) {
       this.schedule()
@@ -181,7 +180,7 @@ export class Timer extends EventEmitter {
   stop () {
     this._started = false
     this._delayed = false
-    this._count = 0
+    this.count = 0
 
     this._stopDelay()
     this._stopInterval()

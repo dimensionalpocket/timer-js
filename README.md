@@ -46,3 +46,7 @@ timer.start({delay: 5000, loop: true})
 timer.start({loop: true, interval: true})
 timer.start({repeat: 5, interval: true})
 ```
+
+## License
+
+MIT
