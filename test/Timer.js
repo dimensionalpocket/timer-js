@@ -243,7 +243,7 @@ describe('Timer', function () {
       var timer = new Timer()
       timer.tick()
       // @ts-ignore private property
-      expect(timer._count).to.eq(0)
+      expect(timer.count).to.eq(0)
     })
   })
 })
