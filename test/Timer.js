@@ -37,7 +37,7 @@ describe('Timer', function () {
     it('calls #configure', function () {
       sinon.stub(Timer.prototype, 'configure')
       var timer = new Timer()
-      expect(timer.configure).to.have.been.calledWith(null)
+      expect(timer.configure).to.have.been.calledWith(undefined)
       timer = new Timer({ duration: 10 })
       expect(timer.configure).to.have.been.calledWith({ duration: 10 })
       // @ts-ignore stubbed method
@@ -46,38 +46,46 @@ describe('Timer', function () {
   })
 
   describe('configure', function () {
-    before(function () {
-      this.timer = new Timer()
-    })
-
     it('sets duration', function () {
-      this.timer.configure({ duration: 10 })
-      expect(this.timer._duration).to.eq(10)
+      var timer = new Timer()
+      timer.configure({ duration: 10 })
+      // @ts-ignore private property
+      expect(timer._duration).to.eq(10)
     })
 
     it('sets repeat', function () {
-      this.timer.configure({ repeat: 5 })
-      expect(this.timer._repeat).to.eq(5)
+      var timer = new Timer()
+      timer.configure({ repeat: 5 })
+      // @ts-ignore private property
+      expect(timer._repeat).to.eq(5)
     })
 
     it('sets repeat to -1 if loop is true', function () {
-      this.timer.configure({ repeat: 5, loop: true })
-      expect(this.timer._repeat).to.eq(-1)
+      var timer = new Timer()
+      timer.configure({ repeat: 5, loop: true })
+      // @ts-ignore private property
+      expect(timer._repeat).to.eq(-1)
     })
 
     it('sets repeat to 1 if given zero', function () {
-      this.timer.configure({ repeat: 0 })
-      expect(this.timer._repeat).to.eq(1)
+      var timer = new Timer()
+      timer.configure({ repeat: 0 })
+      // @ts-ignore private property
+      expect(timer._repeat).to.eq(1)
     })
 
     it('sets repeat to 1 if given a negative value', function () {
-      this.timer.configure({ repeat: -5 })
-      expect(this.timer._repeat).to.eq(1)
+      var timer = new Timer()
+      timer.configure({ repeat: -5 })
+      // @ts-ignore private property
+      expect(timer._repeat).to.eq(1)
     })
 
     it('sets interval', function () {
-      this.timer.configure({ interval: true })
-      expect(this.timer._interval).to.eq(true)
+      var timer = new Timer()
+      timer.configure({ interval: true })
+      // @ts-ignore private property
+      expect(timer._interval).to.eq(true)
     })
   })
 
@@ -109,7 +117,7 @@ describe('Timer', function () {
         this.timer.start({ duration: 10 })
         expect(this.timer.configure).to.have.been.calledWith({ duration: 10 })
         this.timer.start()
-        expect(this.timer.configure).to.have.been.calledWith(null)
+        expect(this.timer.configure).to.have.been.calledWith(undefined)
         this.timer.stop()
 
         // Reset
@@ -243,7 +251,28 @@ describe('Timer', function () {
       var timer = new Timer()
       timer.tick()
       // @ts-ignore private property
-      expect(timer.count).to.eq(0)
+      expect(timer._count).to.eq(0)
+    })
+  })
+
+  describe('#counter', function () {
+    it('is incremented on tick', function () {
+      var timer = new Timer({ duration: 1000, loop: true })
+      timer.start()
+      this.clock.tick(3000)
+      expect(timer.counter).to.eq(3)
+      timer.stop()
+    })
+
+    it('is not reset on stop', function () {
+      var timer = new Timer({ duration: 1000, loop: true })
+      timer.start()
+      this.clock.tick(3000)
+      timer.stop()
+      timer.start()
+      this.clock.tick(3000)
+      timer.stop()
+      expect(timer.counter).to.eq(6)
     })
   })
 })
