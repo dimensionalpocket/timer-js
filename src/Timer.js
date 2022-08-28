@@ -59,7 +59,6 @@ export class Timer extends EventEmitter {
     /**
      * A public counter that gets incremented after each tick
      * and does not reset when the timer is stopped.
-     * Its value is provided as an argument in the tick event.
      *
      * @type {number}
      */
