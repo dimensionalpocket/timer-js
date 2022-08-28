@@ -9,7 +9,9 @@ Opinionated wrapper for Javascript's `setInterval` and `setTimeout` functions.
 ```javascript
 import Timer from '@dimensionalpocket/timer'
 
-var myFunc = () => console.log('Hello world!')
+// Timer instance is provided in event.
+// A `counter` property is incremented on tick.
+var myFunc = (timer) => console.log('Hello world! Times:', this.counter)
 
 // Initialize a timer but don't start it yet.
 // Available events: tick, start, stop

@@ -17,7 +17,7 @@ export class Timer extends EventEmitter {
   /**
    * @param {TimerOptions} [options]
    */
-  constructor (options = null) {
+  constructor (options = undefined) {
     super()
 
     /**
@@ -50,9 +50,19 @@ export class Timer extends EventEmitter {
 
     /**
      * The number of times a tick has happened after the timer started.
+     *
+     * @type {number}
+     * @private
+     */
+    this._count = 0
+
+    /**
+     * A public counter that gets incremented after each tick
+     * and does not reset when the timer is stopped.
+     *
      * @type {number}
      */
-    this.count = 0
+    this.counter = 0
 
     /**
      * If `true`, will use `setInterval` internally.
@@ -93,9 +103,9 @@ export class Timer extends EventEmitter {
   }
 
   /**
-   * @param {TimerOptions} options
+   * @param {TimerOptions} [options]
    */
-  configure (options) {
+  configure (options = undefined) {
     if (!options) return
 
     if (options.duration !== undefined) this._duration = options.duration
@@ -109,7 +119,7 @@ export class Timer extends EventEmitter {
    * Starts the timer.
    * @param {TimerOptions} [options]
    */
-  start (options = null) {
+  start (options = undefined) {
     if (this._started) this.stop()
 
     this.configure(options)
@@ -117,7 +127,7 @@ export class Timer extends EventEmitter {
     var delayed = this._startDelay()
     if (delayed) return
 
-    this.count = 0
+    this._count = 0
 
     this.emit('start', this)
 
@@ -164,10 +174,12 @@ export class Timer extends EventEmitter {
   tick () {
     if (!this._started) return // Guard against race conditions
 
-    this.count++
+    this._count++
+    this.counter++
+
     this.emit('tick', this)
 
-    if (this._repeat > 0 && this.count >= this._repeat) {
+    if (this._repeat > 0 && this._count >= this._repeat) {
       this.stop()
     } else if (this._interval !== true) {
       this.schedule()
@@ -180,7 +192,7 @@ export class Timer extends EventEmitter {
   stop () {
     this._started = false
     this._delayed = false
-    this.count = 0
+    this._count = 0
 
     this._stopDelay()
     this._stopInterval()
